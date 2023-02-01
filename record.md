@@ -19,10 +19,13 @@ make -j SurfelMeshing
 
 运行：
 
-./build_RelWithDebInfo/applications/surfel_meshing/SurfelMeshing ../dataSets/rgbd_dataset_freiburg1_xyz freiburg1_xyz-rgbdslam.txt
+./build_RelWithDebInfo/applications/surfel_meshing/SurfelMeshing ../dataSets/rgbd_dataset_freiburg1_xyz freiburg1_xyz-rgbdslam.txt \
+--export_mesh "res.obj" \
+--export_point_cloud "res2.ply"
 
-# 2 droid slam
+# 2 droid slam(直接使用 conda 安装是最好的)
 
+本节的自己装环境不推荐
 pytorch 1.8.1 -> 1.13.1
 
 ```sh
@@ -68,21 +71,27 @@ python demo.py --imagedir=../dataSets/rgbd_dataset_freiburg1_xyz/rgb --calib=../
 
 python demo.py --imagedir=data/sfm_bench/rgb --calib=calib/eth.txt
 
-
 # 3 大致行动路线
-## 3.0 验证surfelmeshing的构网逻辑
 
-## 3.1 将droid slam得到的相机位姿以及cdm-mvs得到的深度图拼接到 surfelmeshing当中，也就是将surfelmeshing的输入换掉
+## 3.0 验证 surfelmeshing 的构网逻辑
+- 构造网格是实时的（每一帧对surfel的变动都可以反应到网格上），但是思考这么一个问题，对于同一个物体，第i帧和i+n帧都拍到，那么surfel会不会需要更新？
+  - 那么也没关系，毕竟前面的slam部分我们只提供深度图，而不是基于surfel的slam涉及到surfel的更新！！！也就是我们采用了droidslam和cds mvsnet的深度预测替代了这个基于surfel的slam
+> 那么毕设实主要的贡献在于，当场景过大，就采用子场景的方式在重建和渲染方面提速？关键是重建部分减少涉及到的场景的调入调出是否能够加速，也就是说得进一步了解surfel的稠密重建和场景规模的关系，而后修改一下这一部分
+### 3.0.1 surfelmeshing的稠密和场景规模的关系探索清楚？
+
+## 3.1 将 droid slam 得到的相机位姿以及 cdm-mvs 得到的深度图拼接到 surfelmeshing 当中，也就是将 surfelmeshing 的输入换掉
 ### 3.1.1 具体拼接策略遇到的难题
-- rgbd video是否可以通过这种深度预测加上相机路径来合成？
+
+- rgbd video 是否可以通过这种深度预测加上相机路径来合成？
 - 拼接过程的流水线构建？
-- 
+-
 
 ## 3.2 具体的子场景划分算法完善
+
 - 完善算法
 - 涉及到网格融合
-- 
+-
 
 # 4 可能能做的对比 -- simple recon : 优缺点: 能够适应室外场景
 
-
+# 5 毕设的些许思考
