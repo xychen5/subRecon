@@ -95,3 +95,12 @@ python demo.py --imagedir=data/sfm_bench/rgb --calib=calib/eth.txt
 # 4 可能能做的对比 -- simple recon : 优缺点: 能够适应室外场景
 
 # 5 毕设的些许思考
+
+
+# 6 开题报告需要更改的地方：
+- 2.3.4（3）深度测量集成，公式2错了，公式3有些不对
+
+# 附录
+# 1 cuda基础
+- dim3是NVIDIA的CUDA编程中一种自定义的整型向量类型，基于用于指定维度的uint3。例如：dim3 grid（num1，num2，num3）；dim3类型最终设置的是一个三维向量，三维参数分别为x,y,z;
+- 
